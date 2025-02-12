@@ -11,16 +11,24 @@
     <form method="POST">
         <legend><strong>Add New Message</strong></legend>
         <fieldset class="fields">
-            <label>Name</label>
-            <input type="text" name="name" max="255" required>
+            <label for="idUser1">Name</label>
+            <select name="idUser1" id="idUser1">
+                <option value="1">Alex</option>
+                <option value="2">Taylor</option>
+                <option value="3">Riley</option>
+            </select>
     
-            <label>Connection</label>
-            <input type="number" name="idConnection" min="1" required>
+            <label for="idConnection">Connection</label>
+            <select name="idConnection" id="idConnection">
+                <option value="1">Alex-Taylor</option>
+                <option value="2">Alex-NULL</option>
+                <option value="3">NULL-NULL</option>
+              </select>
         
-            <label>Date</label>
+            <label for="date">Date</label>
             <input type="text" name="date" max="255" required>
 
-            <label>Text</label>
+            <label for="text">Text</label>
             <input type="text" name="text" max="255" required>
         </fieldset>
     
