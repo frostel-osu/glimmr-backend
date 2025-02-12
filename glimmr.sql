@@ -42,9 +42,9 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS validate_connections;
 
-CREATE PROCEDURE validate_connections (IN id_user_1 INT, IN id_user_2 INT)
+CREATE PROCEDURE validate_connections (IN p_id_user_1 INT, IN p_id_user_2 INT)
   BEGIN
-    IF id_user_1 >= id_user_2 THEN
+    IF p_id_user_1 >= p_id_user_2 THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The smaller user ID must come first";
     END IF;
   END //
@@ -83,8 +83,86 @@ CREATE TABLE likes (
   CONSTRAINT fk_likes_id_user
     FOREIGN KEY (id_user)
     REFERENCES users (id_user)
-    ON DELETE SET NULL
+    ON DELETE SET NULL,
+  CONSTRAINT unique_likes_id_connection_id_user
+    UNIQUE (id_connection, id_user)
 );
+
+-- CREATE ASSERTIONS FOR VALIDATION
+
+DELIMITER //
+
+DROP FUNCTION IF EXISTS assert_connection_has_two_likes;
+
+CREATE FUNCTION assert_connection_has_two_likes (p_id_connection INT, p_id_user INT)
+  RETURNS BOOLEAN
+  READS SQL DATA
+  BEGIN
+    DECLARE v_likes_count INT;
+
+    SELECT COUNT(*) INTO v_likes_count
+      FROM likes
+      WHERE id_connection = p_id_connection;
+
+    RETURN v_likes_count = 2;
+  END //
+
+DROP FUNCTION IF EXISTS assert_connection_has_user;
+
+CREATE FUNCTION assert_connection_has_user (p_id_connection INT, p_id_user INT)
+  RETURNS BOOLEAN
+  READS SQL DATA
+  BEGIN
+    DECLARE v_connections_count INT;
+
+    SELECT COUNT(*) INTO v_connections_count
+      FROM connections
+      WHERE id_connection = p_id_connection
+      AND (
+        (id_user_1 IS NULL OR id_user_2 IS NULL) AND p_id_user IS NULL
+        OR id_user_1 = p_id_user
+        OR id_user_2 = p_id_user
+      );
+
+    RETURN v_connections_count > 0;
+  END //
+
+DELIMITER ;
+
+-- VALIDATE LIKES
+
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS validate_likes;
+
+CREATE PROCEDURE validate_likes (IN p_id_connection INT, IN p_id_user INT)
+  BEGIN
+    IF assert_connection_has_two_likes (p_id_connection, p_id_user) THEN
+      SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The connection must have less than two likes";
+    END IF;
+
+    IF NOT assert_connection_has_user (p_id_connection, p_id_user) THEN
+      SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The user must be part of the connection";
+    END IF;
+  END //
+
+DROP TRIGGER IF EXISTS before_insert_likes;
+
+CREATE TRIGGER before_insert_likes BEFORE INSERT ON likes
+  FOR EACH ROW
+  BEGIN
+    CALL validate_likes (NEW.id_connection, NEW.id_user);
+  END //
+
+DROP TRIGGER IF EXISTS before_update_likes;
+
+CREATE TRIGGER before_update_likes BEFORE UPDATE ON likes
+  FOR EACH ROW
+  BEGIN
+    CALL validate_likes (NEW.id_connection, NEW.id_user);
+  END //
+
+DELIMITER ;
 
 -- CREATE TABLE FOR MESSAGES
 
@@ -105,6 +183,41 @@ CREATE TABLE messages (
     REFERENCES users (id_user)
     ON DELETE SET NULL
 );
+
+-- VALIDATE MESSAGES
+
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS validate_messages;
+
+CREATE PROCEDURE validate_messages (IN p_id_connection INT, IN p_id_user INT)
+  BEGIN
+    IF NOT assert_connection_has_two_likes (p_id_connection, p_id_user) THEN
+      SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The connection must have two likes";
+    END IF;
+
+    IF NOT assert_connection_has_user (p_id_connection, p_id_user) THEN
+      SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The user must be part of the connection";
+    END IF;
+  END //
+
+DROP TRIGGER IF EXISTS before_insert_messages;
+
+CREATE TRIGGER before_insert_messages BEFORE INSERT ON messages
+  FOR EACH ROW
+  BEGIN
+    CALL validate_messages (NEW.id_connection, NEW.id_user);
+  END //
+
+DROP TRIGGER IF EXISTS before_update_messages;
+
+CREATE TRIGGER before_update_messages BEFORE UPDATE ON messages
+  FOR EACH ROW
+  BEGIN
+    CALL validate_messages (NEW.id_connection, NEW.id_user);
+  END //
+
+DELIMITER ;
 
 -- INSERT EXAMPLE USERS
 
