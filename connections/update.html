@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Connection</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+    <h1>Update Connection</h1>
+
+    <form method="POST">
+        <fieldset>
+            <legend>Edit Connection Details</legend>
+            <input type="hidden" name="id_connection" value="">
+
+            <label>User 1</label>
+            <select name="idUser1" id="idUser1">
+                <option value="1">Alex</option>
+                <option value="2">Taylor</option>
+                <option value="3">Riley</option>
+              </select>
+    
+              <label>User 2</label>
+              <select name="idUser1" id="idUser1">
+                <option value="1">Alex</option>
+                <option value="2" selected="selected">Taylor</option>
+                <option value="3">Riley</option>
+                </select>
+        </fieldset>
+
+        <input type="submit" value="Save">
+        <button type="button" onclick="window.location.href='read.html'">Cancel</button>
+    </form>
+
+</body>
+</html>
