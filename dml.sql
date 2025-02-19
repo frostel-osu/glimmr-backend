@@ -1,5 +1,11 @@
 -- CREATE CRUD FOR USERS
 
+DROP VIEW IF EXISTS view_users;
+
+CREATE VIEW view_users AS
+  SELECT * FROM users
+  ORDER BY id_user;
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS create_user;
@@ -15,7 +21,7 @@ DROP PROCEDURE IF EXISTS read_users_by_id;
 CREATE PROCEDURE read_users_by_id (IN p_id_user INT)
   READS SQL DATA
   BEGIN
-    SELECT * FROM users WHERE id_user = p_id_user;
+    SELECT * FROM view_users WHERE id_user = p_id_user;
   END //
 
 DROP PROCEDURE IF EXISTS read_users;
@@ -23,7 +29,7 @@ DROP PROCEDURE IF EXISTS read_users;
 CREATE PROCEDURE read_users ()
   READS SQL DATA
   BEGIN
-    SELECT * FROM users;
+    SELECT * FROM view_users;
   END //
 
 DROP PROCEDURE IF EXISTS update_user;
@@ -46,6 +52,19 @@ DELIMITER ;
 
 -- CREATE CRUD FOR CONNECTIONS
 
+DROP VIEW IF EXISTS view_connections;
+
+CREATE VIEW view_connections AS
+  SELECT
+    this.*,
+    CONCAT(IFNULL(user_1.name, "NULL"), " + ", IFNULL(user_2.name, "NULL")) AS name_connection,
+    user_1.name AS name_user_1,
+    user_2.name AS name_user_2
+  FROM connections AS this
+  LEFT JOIN view_users AS user_1 ON this.id_user_1 = user_1.id_user
+  LEFT JOIN view_users AS user_2 ON this.id_user_2 = user_2.id_user
+  ORDER BY this.id_connection;
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS create_connection;
@@ -61,7 +80,7 @@ DROP PROCEDURE IF EXISTS read_connections_by_id;
 CREATE PROCEDURE read_connections_by_id (IN p_id_connection INT)
   READS SQL DATA
   BEGIN
-    SELECT * FROM connections WHERE id_connection = p_id_connection;
+    SELECT * FROM view_connections WHERE id_connection = p_id_connection;
   END //
 
 DROP PROCEDURE IF EXISTS read_connections;
@@ -69,7 +88,7 @@ DROP PROCEDURE IF EXISTS read_connections;
 CREATE PROCEDURE read_connections ()
   READS SQL DATA
   BEGIN
-    SELECT * FROM connections;
+    SELECT * FROM view_connections;
   END //
 
 DROP PROCEDURE IF EXISTS update_connection;
@@ -92,6 +111,15 @@ DELIMITER ;
 
 -- CREATE CRUD FOR LIKES
 
+DROP VIEW IF EXISTS view_likes;
+
+CREATE VIEW view_likes AS
+  SELECT this.*, connection.name_connection, user.name AS name_user
+  FROM likes AS this
+  JOIN view_connections AS connection ON this.id_connection = connection.id_connection
+  LEFT JOIN view_users AS user ON this.id_user = user.id_user
+  ORDER BY this.id_like;
+
 DELIMITER //
 
 DROP PROCEDURE IF EXISTS create_like;
@@ -107,7 +135,7 @@ DROP PROCEDURE IF EXISTS read_likes_by_id;
 CREATE PROCEDURE read_likes_by_id (IN p_id_like INT)
   READS SQL DATA
   BEGIN
-    SELECT * FROM likes WHERE id_like = p_id_like;
+    SELECT * FROM view_likes WHERE id_like = p_id_like;
   END //
 
 DROP PROCEDURE IF EXISTS read_likes;
@@ -115,28 +143,21 @@ DROP PROCEDURE IF EXISTS read_likes;
 CREATE PROCEDURE read_likes ()
   READS SQL DATA
   BEGIN
-    SELECT * FROM likes;
-  END //
-
-DROP PROCEDURE IF EXISTS update_like;
-
-CREATE PROCEDURE update_like (IN p_id_like INT, IN p_id_connection INT, IN p_id_user INT)
-  MODIFIES SQL DATA
-  BEGIN
-    UPDATE likes SET id_connection = p_id_connection, id_user = p_id_user WHERE id_like = p_id_like;
-  END //
-
-DROP PROCEDURE IF EXISTS delete_like;
-
-CREATE PROCEDURE delete_like (IN p_id_like INT)
-  MODIFIES SQL DATA
-  BEGIN
-    DELETE FROM likes WHERE id_like = p_id_like;
+    SELECT * FROM view_likes;
   END //
 
 DELIMITER ;
 
 -- CREATE CRUD FOR MESSAGES
+
+DROP VIEW IF EXISTS view_messages;
+
+CREATE VIEW view_messages AS
+  SELECT this.*, connection.name_connection, user.name AS name_user
+  FROM messages AS this
+  JOIN view_connections AS connection ON this.id_connection = connection.id_connection
+  LEFT JOIN view_users AS user ON this.id_user = user.id_user
+  ORDER BY this.id_message;
 
 DELIMITER //
 
@@ -153,7 +174,7 @@ DROP PROCEDURE IF EXISTS read_messages_by_id;
 CREATE PROCEDURE read_messages_by_id (IN p_id_message INT)
   READS SQL DATA
   BEGIN
-    SELECT * FROM messages WHERE id_message = p_id_message;
+    SELECT * FROM view_messages WHERE id_message = p_id_message;
   END //
 
 DROP PROCEDURE IF EXISTS read_messages;
@@ -161,23 +182,7 @@ DROP PROCEDURE IF EXISTS read_messages;
 CREATE PROCEDURE read_messages ()
   READS SQL DATA
   BEGIN
-    SELECT * FROM messages;
-  END //
-
-DROP PROCEDURE IF EXISTS update_message;
-
-CREATE PROCEDURE update_message (IN p_id_message INT, IN p_id_connection INT, IN p_id_user INT, IN p_text VARCHAR(255))
-  MODIFIES SQL DATA
-  BEGIN
-    UPDATE messages SET id_connection = p_id_connection, id_user = p_id_user, text = p_text WHERE id_message = p_id_message;
-  END //
-
-DROP PROCEDURE IF EXISTS delete_message;
-
-CREATE PROCEDURE delete_message (IN p_id_message INT)
-  MODIFIES SQL DATA
-  BEGIN
-    DELETE FROM messages WHERE id_message = p_id_message;
+    SELECT * FROM view_messages;
   END //
 
 DELIMITER ;
