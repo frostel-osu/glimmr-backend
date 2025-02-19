@@ -36,6 +36,16 @@ CREATE TABLE connections (
     UNIQUE (id_user_1, id_user_2)
 );
 
+-- INDEX CONNECTIONS
+
+DROP INDEX IF EXISTS index_connections_id_user_1 ON connections;
+
+CREATE INDEX index_connections_id_user_1 ON connections (id_user_1);
+
+DROP INDEX IF EXISTS index_connections_id_user_2 ON connections;
+
+CREATE INDEX index_connections_id_user_2 ON connections (id_user_2);
+
 -- VALIDATE CONNECTIONS
 
 DELIMITER //
@@ -87,6 +97,16 @@ CREATE TABLE likes (
   CONSTRAINT unique_likes_id_connection_id_user
     UNIQUE (id_connection, id_user)
 );
+
+-- INDEX LIKES
+
+DROP INDEX IF EXISTS index_likes_id_connection ON likes;
+
+CREATE INDEX index_likes_id_connection ON likes (id_connection);
+
+DROP INDEX IF EXISTS index_likes_id_user ON likes;
+
+CREATE INDEX index_likes_id_user ON likes (id_user);
 
 -- CREATE ASSERTIONS FOR VALIDATION
 
@@ -183,6 +203,16 @@ CREATE TABLE messages (
     REFERENCES users (id_user)
     ON DELETE SET NULL
 );
+
+-- INDEX MESSAGES
+
+DROP INDEX IF EXISTS index_messages_id_connection ON messages;
+
+CREATE INDEX index_messages_id_connection ON messages (id_connection);
+
+DROP INDEX IF EXISTS index_messages_id_user ON messages;
+
+CREATE INDEX index_messages_id_user ON messages (id_user);
 
 -- VALIDATE MESSAGES
 
