@@ -24,6 +24,7 @@ CREATE TABLE connections (
   id_connection INT AUTO_INCREMENT PRIMARY KEY,
   id_user_1 INT,
   id_user_2 INT,
+  date DATETIME,
   CONSTRAINT fk_connections_id_user_1
     FOREIGN KEY (id_user_1)
     REFERENCES users (id_user)
@@ -50,7 +51,7 @@ CREATE INDEX index_connections_id_user_2 ON connections (id_user_2);
 
 DELIMITER //
 
-DROP PROCEDURE IF EXISTS validate_connections;
+DROP PROCEDURE IF EXISTS validate_connections //
 
 CREATE PROCEDURE validate_connections(IN p_id_user_1 INT, IN p_id_user_2 INT)
   BEGIN
@@ -59,7 +60,7 @@ CREATE PROCEDURE validate_connections(IN p_id_user_1 INT, IN p_id_user_2 INT)
     END IF;
   END //
 
-DROP TRIGGER IF EXISTS before_insert_connections;
+DROP TRIGGER IF EXISTS before_insert_connections //
 
 CREATE TRIGGER before_insert_connections BEFORE INSERT ON connections
   FOR EACH ROW
@@ -67,7 +68,7 @@ CREATE TRIGGER before_insert_connections BEFORE INSERT ON connections
     CALL validate_connections(NEW.id_user_1, NEW.id_user_2);
   END //
 
-DROP TRIGGER IF EXISTS before_update_connections;
+DROP TRIGGER IF EXISTS before_update_connections //
 
 CREATE TRIGGER before_update_connections BEFORE UPDATE ON connections
   FOR EACH ROW
@@ -112,7 +113,7 @@ CREATE INDEX index_likes_id_user ON likes (id_user);
 
 DELIMITER //
 
-DROP FUNCTION IF EXISTS assert_connection_has_two_likes;
+DROP FUNCTION IF EXISTS assert_connection_has_two_likes //
 
 CREATE FUNCTION assert_connection_has_two_likes(p_id_connection INT, p_id_user INT)
   RETURNS BOOLEAN
@@ -127,7 +128,7 @@ CREATE FUNCTION assert_connection_has_two_likes(p_id_connection INT, p_id_user I
     RETURN v_likes_count = 2;
   END //
 
-DROP FUNCTION IF EXISTS assert_connection_has_user;
+DROP FUNCTION IF EXISTS assert_connection_has_user //
 
 CREATE FUNCTION assert_connection_has_user(p_id_connection INT, p_id_user INT)
   RETURNS BOOLEAN
@@ -153,7 +154,7 @@ DELIMITER ;
 
 DELIMITER //
 
-DROP PROCEDURE IF EXISTS validate_likes;
+DROP PROCEDURE IF EXISTS validate_likes //
 
 CREATE PROCEDURE validate_likes(IN p_id_connection INT, IN p_id_user INT)
   BEGIN
@@ -166,7 +167,7 @@ CREATE PROCEDURE validate_likes(IN p_id_connection INT, IN p_id_user INT)
     END IF;
   END //
 
-DROP TRIGGER IF EXISTS before_insert_likes;
+DROP TRIGGER IF EXISTS before_insert_likes //
 
 CREATE TRIGGER before_insert_likes BEFORE INSERT ON likes
   FOR EACH ROW
@@ -218,7 +219,7 @@ CREATE INDEX index_messages_id_user ON messages (id_user);
 
 DELIMITER //
 
-DROP PROCEDURE IF EXISTS validate_messages;
+DROP PROCEDURE IF EXISTS validate_messages //
 
 CREATE PROCEDURE validate_messages(IN p_id_connection INT, IN p_id_user INT)
   BEGIN
@@ -231,7 +232,7 @@ CREATE PROCEDURE validate_messages(IN p_id_connection INT, IN p_id_user INT)
     END IF;
   END //
 
-DROP TRIGGER IF EXISTS before_insert_messages;
+DROP TRIGGER IF EXISTS before_insert_messages //
 
 CREATE TRIGGER before_insert_messages BEFORE INSERT ON messages
   FOR EACH ROW
@@ -239,7 +240,7 @@ CREATE TRIGGER before_insert_messages BEFORE INSERT ON messages
     CALL validate_messages(NEW.id_connection, NEW.id_user);
   END //
 
-DROP TRIGGER IF EXISTS before_update_messages;
+DROP TRIGGER IF EXISTS before_update_messages //
 
 CREATE TRIGGER before_update_messages BEFORE UPDATE ON messages
   FOR EACH ROW

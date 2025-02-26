@@ -11,11 +11,14 @@
         <h1>Glimmr Database</h1>
         <p>Manage users, connections, likes, or messages.</p>
     </main>
-    <nav class="home">
-            <a href="users/read.html">Users</a>
-            <a href="connections/read.html">Connections</a>
-            <a href="likes/read.html">Likes</a>
-            <a href="messages/read.html">Messages</a>
+    <nav>
+        <button onclick="loadView('home')">Home</button>
+        <button onclick="loadView('users')">Users</button>
     </nav>
+
+    <div id="content">
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
