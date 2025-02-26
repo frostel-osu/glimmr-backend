@@ -10,15 +10,17 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS create_user;
 
-CREATE PROCEDURE create_user (IN p_email VARCHAR(255), IN p_name VARCHAR(255), IN p_phone VARCHAR(255))
+CREATE PROCEDURE create_user(IN p_email VARCHAR(255), IN p_name VARCHAR(255), IN p_phone VARCHAR(255))
   MODIFIES SQL DATA
   BEGIN
-    INSERT INTO users (date, email, phone, name) VALUES (NOW(), p_email, p_name, p_phone);
+    INSERT INTO users (date, email, name, phone) VALUES (NOW(), p_email, p_name, p_phone);
+
+    CALL read_users_by_id(LAST_INSERT_ID());
   END //
 
 DROP PROCEDURE IF EXISTS read_users_by_id;
 
-CREATE PROCEDURE read_users_by_id (IN p_id_user INT)
+CREATE PROCEDURE read_users_by_id(IN p_id_user INT)
   READS SQL DATA
   BEGIN
     SELECT * FROM view_users WHERE id_user = p_id_user;
@@ -26,7 +28,7 @@ CREATE PROCEDURE read_users_by_id (IN p_id_user INT)
 
 DROP PROCEDURE IF EXISTS read_users;
 
-CREATE PROCEDURE read_users ()
+CREATE PROCEDURE read_users()
   READS SQL DATA
   BEGIN
     SELECT * FROM view_users;
@@ -34,15 +36,21 @@ CREATE PROCEDURE read_users ()
 
 DROP PROCEDURE IF EXISTS update_user;
 
-CREATE PROCEDURE update_user (IN p_id_user INT, IN p_email VARCHAR(255), IN p_name VARCHAR(255), IN p_phone VARCHAR(255))
+CREATE PROCEDURE update_user(IN p_id_user INT, IN p_email VARCHAR(255), IN p_name VARCHAR(255), IN p_phone VARCHAR(255))
   MODIFIES SQL DATA
   BEGIN
-    UPDATE users SET email = p_email, name = p_name, phone = p_phone WHERE id_user = p_id_user;
+    UPDATE users SET
+      email = IFNULL(p_email, email),
+      name = IFNULL(p_name, name),
+      phone = IFNULL(p_phone, phone)
+      WHERE id_user = p_id_user;
+
+    CALL read_users_by_id(p_id_user);
   END //
 
 DROP PROCEDURE IF EXISTS delete_user;
 
-CREATE PROCEDURE delete_user (IN p_id_user INT)
+CREATE PROCEDURE delete_user(IN p_id_user INT)
   MODIFIES SQL DATA
   BEGIN
     DELETE FROM users WHERE id_user = p_id_user;
@@ -69,7 +77,7 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS create_connection;
 
-CREATE PROCEDURE create_connection (IN p_id_user_1 INT, IN p_id_user_2 INT)
+CREATE PROCEDURE create_connection(IN p_id_user_1 INT, IN p_id_user_2 INT)
   MODIFIES SQL DATA
   BEGIN
     INSERT INTO connections (id_user_1, id_user_2) VALUES (p_id_user_1, p_id_user_2);
@@ -77,7 +85,7 @@ CREATE PROCEDURE create_connection (IN p_id_user_1 INT, IN p_id_user_2 INT)
 
 DROP PROCEDURE IF EXISTS read_connections_by_id;
 
-CREATE PROCEDURE read_connections_by_id (IN p_id_connection INT)
+CREATE PROCEDURE read_connections_by_id(IN p_id_connection INT)
   READS SQL DATA
   BEGIN
     SELECT * FROM view_connections WHERE id_connection = p_id_connection;
@@ -85,7 +93,7 @@ CREATE PROCEDURE read_connections_by_id (IN p_id_connection INT)
 
 DROP PROCEDURE IF EXISTS read_connections;
 
-CREATE PROCEDURE read_connections ()
+CREATE PROCEDURE read_connections()
   READS SQL DATA
   BEGIN
     SELECT * FROM view_connections;
@@ -93,7 +101,7 @@ CREATE PROCEDURE read_connections ()
 
 DROP PROCEDURE IF EXISTS update_connection;
 
-CREATE PROCEDURE update_connection (IN p_id_connection INT, IN p_id_user_1 INT, IN p_id_user_2 INT)
+CREATE PROCEDURE update_connection(IN p_id_connection INT, IN p_id_user_1 INT, IN p_id_user_2 INT)
   MODIFIES SQL DATA
   BEGIN
     UPDATE connections SET id_user_1 = p_id_user_1, id_user_2 = p_id_user_2 WHERE id_connection = p_id_connection;
@@ -101,7 +109,7 @@ CREATE PROCEDURE update_connection (IN p_id_connection INT, IN p_id_user_1 INT, 
 
 DROP PROCEDURE IF EXISTS delete_connection;
 
-CREATE PROCEDURE delete_connection (IN p_id_connection INT)
+CREATE PROCEDURE delete_connection(IN p_id_connection INT)
   MODIFIES SQL DATA
   BEGIN
     DELETE FROM connections WHERE id_connection = p_id_connection;
@@ -124,7 +132,7 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS create_like;
 
-CREATE PROCEDURE create_like (IN p_id_connection INT, IN p_id_user INT)
+CREATE PROCEDURE create_like(IN p_id_connection INT, IN p_id_user INT)
   MODIFIES SQL DATA
   BEGIN
     INSERT INTO likes (id_connection, id_user, date) VALUES (p_id_connection, p_id_user, NOW());
@@ -132,7 +140,7 @@ CREATE PROCEDURE create_like (IN p_id_connection INT, IN p_id_user INT)
 
 DROP PROCEDURE IF EXISTS read_likes_by_id;
 
-CREATE PROCEDURE read_likes_by_id (IN p_id_like INT)
+CREATE PROCEDURE read_likes_by_id(IN p_id_like INT)
   READS SQL DATA
   BEGIN
     SELECT * FROM view_likes WHERE id_like = p_id_like;
@@ -140,7 +148,7 @@ CREATE PROCEDURE read_likes_by_id (IN p_id_like INT)
 
 DROP PROCEDURE IF EXISTS read_likes;
 
-CREATE PROCEDURE read_likes ()
+CREATE PROCEDURE read_likes()
   READS SQL DATA
   BEGIN
     SELECT * FROM view_likes;
@@ -163,7 +171,7 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS create_message;
 
-CREATE PROCEDURE create_message (IN p_id_connection INT, IN p_id_user INT, IN p_text VARCHAR(255))
+CREATE PROCEDURE create_message(IN p_id_connection INT, IN p_id_user INT, IN p_text VARCHAR(255))
   MODIFIES SQL DATA
   BEGIN
     INSERT INTO messages (id_connection, id_user, date, text) VALUES (p_id_connection, p_id_user, NOW(), p_text);
@@ -171,7 +179,7 @@ CREATE PROCEDURE create_message (IN p_id_connection INT, IN p_id_user INT, IN p_
 
 DROP PROCEDURE IF EXISTS read_messages_by_id;
 
-CREATE PROCEDURE read_messages_by_id (IN p_id_message INT)
+CREATE PROCEDURE read_messages_by_id(IN p_id_message INT)
   READS SQL DATA
   BEGIN
     SELECT * FROM view_messages WHERE id_message = p_id_message;
@@ -179,7 +187,7 @@ CREATE PROCEDURE read_messages_by_id (IN p_id_message INT)
 
 DROP PROCEDURE IF EXISTS read_messages;
 
-CREATE PROCEDURE read_messages ()
+CREATE PROCEDURE read_messages()
   READS SQL DATA
   BEGIN
     SELECT * FROM view_messages;

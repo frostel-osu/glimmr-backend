@@ -52,7 +52,7 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS validate_connections;
 
-CREATE PROCEDURE validate_connections (IN p_id_user_1 INT, IN p_id_user_2 INT)
+CREATE PROCEDURE validate_connections(IN p_id_user_1 INT, IN p_id_user_2 INT)
   BEGIN
     IF p_id_user_1 >= p_id_user_2 THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The smaller user ID must come first";
@@ -64,7 +64,7 @@ DROP TRIGGER IF EXISTS before_insert_connections;
 CREATE TRIGGER before_insert_connections BEFORE INSERT ON connections
   FOR EACH ROW
   BEGIN
-    CALL validate_connections (NEW.id_user_1, NEW.id_user_2);
+    CALL validate_connections(NEW.id_user_1, NEW.id_user_2);
   END //
 
 DROP TRIGGER IF EXISTS before_update_connections;
@@ -72,7 +72,7 @@ DROP TRIGGER IF EXISTS before_update_connections;
 CREATE TRIGGER before_update_connections BEFORE UPDATE ON connections
   FOR EACH ROW
   BEGIN
-    CALL validate_connections (NEW.id_user_1, NEW.id_user_2);
+    CALL validate_connections(NEW.id_user_1, NEW.id_user_2);
   END //
 
 DELIMITER ;
@@ -114,7 +114,7 @@ DELIMITER //
 
 DROP FUNCTION IF EXISTS assert_connection_has_two_likes;
 
-CREATE FUNCTION assert_connection_has_two_likes (p_id_connection INT, p_id_user INT)
+CREATE FUNCTION assert_connection_has_two_likes(p_id_connection INT, p_id_user INT)
   RETURNS BOOLEAN
   READS SQL DATA
   BEGIN
@@ -129,7 +129,7 @@ CREATE FUNCTION assert_connection_has_two_likes (p_id_connection INT, p_id_user 
 
 DROP FUNCTION IF EXISTS assert_connection_has_user;
 
-CREATE FUNCTION assert_connection_has_user (p_id_connection INT, p_id_user INT)
+CREATE FUNCTION assert_connection_has_user(p_id_connection INT, p_id_user INT)
   RETURNS BOOLEAN
   READS SQL DATA
   BEGIN
@@ -155,13 +155,13 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS validate_likes;
 
-CREATE PROCEDURE validate_likes (IN p_id_connection INT, IN p_id_user INT)
+CREATE PROCEDURE validate_likes(IN p_id_connection INT, IN p_id_user INT)
   BEGIN
-    IF assert_connection_has_two_likes (p_id_connection, p_id_user) THEN
+    IF assert_connection_has_two_likes(p_id_connection, p_id_user) THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The connection must have less than two likes";
     END IF;
 
-    IF NOT assert_connection_has_user (p_id_connection, p_id_user) THEN
+    IF NOT assert_connection_has_user(p_id_connection, p_id_user) THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The user must be part of the connection";
     END IF;
   END //
@@ -171,7 +171,7 @@ DROP TRIGGER IF EXISTS before_insert_likes;
 CREATE TRIGGER before_insert_likes BEFORE INSERT ON likes
   FOR EACH ROW
   BEGIN
-    CALL validate_likes (NEW.id_connection, NEW.id_user);
+    CALL validate_likes(NEW.id_connection, NEW.id_user);
   END //
 
 DROP TRIGGER IF EXISTS before_update_likes;
@@ -179,7 +179,7 @@ DROP TRIGGER IF EXISTS before_update_likes;
 CREATE TRIGGER before_update_likes BEFORE UPDATE ON likes
   FOR EACH ROW
   BEGIN
-    CALL validate_likes (NEW.id_connection, NEW.id_user);
+    CALL validate_likes(NEW.id_connection, NEW.id_user);
   END //
 
 DELIMITER ;
@@ -220,13 +220,13 @@ DELIMITER //
 
 DROP PROCEDURE IF EXISTS validate_messages;
 
-CREATE PROCEDURE validate_messages (IN p_id_connection INT, IN p_id_user INT)
+CREATE PROCEDURE validate_messages(IN p_id_connection INT, IN p_id_user INT)
   BEGIN
-    IF NOT assert_connection_has_two_likes (p_id_connection, p_id_user) THEN
+    IF NOT assert_connection_has_two_likes(p_id_connection, p_id_user) THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The connection must have two likes";
     END IF;
 
-    IF NOT assert_connection_has_user (p_id_connection, p_id_user) THEN
+    IF NOT assert_connection_has_user(p_id_connection, p_id_user) THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The user must be part of the connection";
     END IF;
   END //
@@ -236,7 +236,7 @@ DROP TRIGGER IF EXISTS before_insert_messages;
 CREATE TRIGGER before_insert_messages BEFORE INSERT ON messages
   FOR EACH ROW
   BEGIN
-    CALL validate_messages (NEW.id_connection, NEW.id_user);
+    CALL validate_messages(NEW.id_connection, NEW.id_user);
   END //
 
 DROP TRIGGER IF EXISTS before_update_messages;
@@ -244,7 +244,7 @@ DROP TRIGGER IF EXISTS before_update_messages;
 CREATE TRIGGER before_update_messages BEFORE UPDATE ON messages
   FOR EACH ROW
   BEGIN
-    CALL validate_messages (NEW.id_connection, NEW.id_user);
+    CALL validate_messages(NEW.id_connection, NEW.id_user);
   END //
 
 DELIMITER ;

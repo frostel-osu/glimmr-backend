@@ -1,0 +1,39 @@
+@port = 3000
+
+@id_user = 4
+
+### 1. CREATE
+
+POST http://localhost:{{port}}/users HTTP/1.1
+content-type: application/json
+
+{
+  "email": "jordan@example.com",
+  "name": "Jordan",
+  "phone": "555-444-4444"
+}
+
+### 2. READ ONE
+
+GET http://localhost:{{port}}/users/{{id_user}} HTTP/1.1
+
+### 3. READ ALL
+
+GET http://localhost:{{port}}/users HTTP/1.1
+
+### 4. UPDATE
+
+PUT http://localhost:{{port}}/users/{{id_user}} HTTP/1.1
+content-type: application/json
+
+{
+  "phone": "555-555-5555"
+}
+
+### 5. DELETE
+
+DELETE http://localhost:{{port}}/users/{{id_user}} HTTP/1.1
+
+### 6. READ ALL
+
+GET http://localhost:{{port}}/users HTTP/1.1
