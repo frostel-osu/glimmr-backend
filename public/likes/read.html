@@ -7,15 +7,18 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <h1>All Likes</h1>
     <nav>
         <a href="../index.html">Home</a>
-        <a href="../users/read.html">Users</a>
+        <a href="#" onclick="loadView('users'); return false;">Users</a>
         <a href="../connections/read.html">Connections</a>
         <a href="../likes/read.html">Likes</a>
         <a href="../messages/read.html">Messages</a>
     </nav>
 
+    <script src="../app.js"></script>
+    <div id="hide">
+
+    <h1>All Likes</h1>
     <div>
         <h2>Likes List</h2>
         <button type="button"><a href="create.html">Add New Like</a></button>
@@ -47,5 +50,10 @@
             </tr>
         </table>
     </div>
+    </div>
+
+    <div id="content">
+    </div>
+
 </body>
 </html>
