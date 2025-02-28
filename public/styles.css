@@ -70,6 +70,8 @@ nav a.home{
     font-size:larger;
     color:white;
     font: inherit;
+    padding:10px;
+    padding-bottom:8px;
 }
 
 

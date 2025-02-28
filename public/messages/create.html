@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Glimmr Message</title>
+        <link rel="stylesheet" href="../styles.css">
+    </head>
+    
+<body>
+    <form method="POST">
+        <legend><strong>Add New Message</strong></legend>
+        <fieldset class="fields">
+            <label for="idUser1">User</label>
+            <select name="idUser1" id="idUser1">
+                <option value="1">Alex</option>
+                <option value="2">Taylor</option>
+                <option value="3">Riley</option>
+            </select>
+    
+            <label for="idConnection">Connection</label>
+            <select name="idConnection" id="idConnection">
+                <option value="1">Alex-Taylor</option>
+                <option value="2">Alex-NULL</option>
+                <option value="3">NULL-NULL</option>
+              </select>
+
+            <label for="text">Text</label>
+            <input type="text" name="text" max="255" required>
+        </fieldset>
+    
+        <input class="btn" type="submit" value="Add Message">
+        <input class="btn" type="button" value="Cancel" onClick="window.location.href='read.html'">
+    </form>
+    
+</body>
+</html>
