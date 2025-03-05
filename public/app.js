@@ -1,8 +1,6 @@
 "use strict";
 
-const contentDiv = document.getElementById("content");
-
-// Home page
+// Define functions globally
 const loadView = async (view) => {
     switch (view) {
         case "users":
@@ -16,7 +14,15 @@ const loadView = async (view) => {
 
 // Read users
 const loadUsersView = async () => {
-    const users = await fetchUsers(); // Fetch users from the backend
+    const contentDiv = document.getElementById("content");
+    const homeContent = document.getElementById("home-content");
+    const homeNav = document.getElementById("home-nav");
+    const hide = document.getElementById("hide")
+    const users = await fetchUsers();
+
+    if (homeContent) homeContent.style.display = "none";
+    if (homeNav) homeNav.style.display = "none";
+    if (hide) hide.style.display = "none"
     contentDiv.innerHTML = `
         <h2>Users List</h2>
         <button onclick="loadCreateUserView()">Add New User</button>
@@ -49,6 +55,7 @@ const loadUsersView = async () => {
 
 // Add new user (form)
 const loadCreateUserView = () => {
+    const contentDiv = document.getElementById("content");
     contentDiv.innerHTML = `
         <h2>Add Glimmr User</h2>
         <form id="create-user-form">
@@ -72,7 +79,7 @@ const loadCreateUserView = () => {
     document.getElementById("create-user-form").addEventListener("submit", handleCreateUser);
 
     document.getElementById("cancel-create").addEventListener("click", () => {
-        loadView("users"); 
+        loadView("users");
     });
 };
 
@@ -86,7 +93,6 @@ const handleCreateUser = async (event) => {
         email: formData.get("email"),
         phone: formData.get("phone"),
     };
-
 
     const response = await fetch("/users", {
         method: "POST",
@@ -116,7 +122,6 @@ const deleteUser = async (id) => {
                     <fieldset class="fields">
                         <p>Are you sure you wish to delete the following user?</p>
                         <input type="hidden" name="personID" id="deletepersonID" value="${user.id_user}">
-                        <label><strong>ID:</strong></label> ${user.id_user}
                         <label> <strong>Name:</strong> </label> ${user.name}
                     </fieldset>
                     <button type="submit">Delete</button>
@@ -154,12 +159,10 @@ const deleteUser = async (id) => {
 
 const editUser = async (id) => {
     try {
-        // Fetch the user's details from the backend
         const response = await fetch(`/users/${id}`);
         const user = await response.json();
 
         if (response.ok) {
-            // Dynamically generate the update form using template literals
             const editPageHTML = `
                 <h1>Update User</h1>
                 <form id="edit-user-form">
@@ -178,15 +181,12 @@ const editUser = async (id) => {
                 </form>
             `;
 
-            // Inject the update form into the DOM
             const contentDiv = document.getElementById("content");
             contentDiv.innerHTML = editPageHTML;
 
-            // Add an event listener for the form submission
             document.getElementById("edit-user-form").addEventListener("submit", async (event) => {
                 event.preventDefault();
 
-                // Get the updated user data from the form
                 const formData = new FormData(event.target);
                 const updatedUser = {
                     name: formData.get("name"),
@@ -194,7 +194,6 @@ const editUser = async (id) => {
                     phone: formData.get("phone"),
                 };
 
-                // Send a PUT request to the backend to update the user
                 const updateResponse = await fetch(`/users/${id}`, {
                     method: "PUT",
                     headers: {
@@ -204,16 +203,13 @@ const editUser = async (id) => {
                 });
 
                 if (updateResponse.ok) {
-                    // Refresh the users list after updating
                     loadView("users");
                 } else {
                     console.error("Error updating user:", await updateResponse.json());
                 }
             });
 
-            // Add an event listener for the "Cancel" button
             document.getElementById("cancel-edit").addEventListener("click", () => {
-                // Go back to the users list
                 loadView("users");
             });
         } else {
@@ -230,4 +226,12 @@ const fetchUsers = async () => {
     return await response.json();
 };
 
-loadView("home");
+document.addEventListener('DOMContentLoaded', () => {
+    const usersLink = document.querySelector("a[href='#']");
+    if (usersLink) {
+        usersLink.addEventListener('click', (event) => {
+            event.preventDefault(); 
+            loadView('users');
+        });
+    }
+});
