@@ -83,6 +83,8 @@ CREATE PROCEDURE create_connection(IN p_id_user_1 INT, IN p_id_user_2 INT)
   MODIFIES SQL DATA
   BEGIN
     INSERT INTO connections (id_user_1, id_user_2) VALUES (p_id_user_1, p_id_user_2);
+
+    CALL read_connections_by_id(LAST_INSERT_ID());
   END //
 
 DROP PROCEDURE IF EXISTS read_connections_by_id //
@@ -113,6 +115,8 @@ CREATE PROCEDURE update_connection(IN p_id_connection INT, IN p_id_user_1 INT, I
         is_deleted = IFNULL(p_is_deleted, is_deleted)
       WHERE
         id_connection = p_id_connection;
+
+    CALL read_connections_by_id(p_id_connection);
   END //
 
 DROP PROCEDURE IF EXISTS delete_connection //
@@ -144,6 +148,8 @@ CREATE PROCEDURE create_like(IN p_id_connection INT, IN p_id_user INT)
   MODIFIES SQL DATA
   BEGIN
     INSERT INTO likes (id_connection, id_user) VALUES (p_id_connection, p_id_user);
+
+    CALL read_likes_by_id(LAST_INSERT_ID());
   END //
 
 DROP PROCEDURE IF EXISTS read_likes_by_id //
@@ -183,6 +189,8 @@ CREATE PROCEDURE create_message(IN p_id_connection INT, IN p_id_user INT, IN p_t
   MODIFIES SQL DATA
   BEGIN
     INSERT INTO messages (id_connection, id_user, text) VALUES (p_id_connection, p_id_user, p_text);
+
+    CALL read_messages_by_id(LAST_INSERT_ID());
   END //
 
 DROP PROCEDURE IF EXISTS read_messages_by_id //

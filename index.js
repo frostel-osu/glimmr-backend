@@ -47,8 +47,8 @@ app.put("/users/:id", handle_async(async (req, res) => {
     req.params.id,
     email || null,
     name || null,
-    phone || null]
-  );
+    phone || null
+  ]);
 
   if (metadata.affectedRows > 0) {
     res.json(data);
@@ -65,6 +65,93 @@ app.delete("/users/:id", handle_async(async (req, res) => {
   } else {
     res.status(404).send();
   }
+}));
+
+app.post("/connections", handle_async(async (req, res) => {
+  const { id_user_1, id_user_2 } = req.body;
+
+  const [[[data]]] = await pool.execute("CALL create_connection(?, ?)", [id_user_1, id_user_2]);
+
+  res.status(201).json(data);
+}));
+
+app.get("/connections/:id", handle_async(async (req, res) => {
+  const [[[data]]] = await pool.execute("CALL read_connections_by_id(?)", [req.params.id]);
+
+  res.json(data);
+}));
+
+app.get("/connections", handle_async(async (req, res) => {
+  const [[data]] = await pool.execute("CALL read_connections", []);
+
+  res.json(data);
+}));
+
+app.put("/connections/:id", handle_async(async (req, res) => {
+  const { id_user_1, id_user_2, is_deleted } = req.body;
+
+  const [[[data], metadata]] = await pool.execute("CALL update_connection(?, ?, ?, ?)", [
+    req.params.id,
+    id_user_1 || null,
+    id_user_2 || null,
+    is_deleted || null
+  ]);
+
+  if (metadata.affectedRows > 0) {
+    res.json(data);
+  } else {
+    res.status(404).send();
+  }
+}));
+
+app.delete("/connections/:id", handle_async(async (req, res) => {
+  const [metadata] = await pool.execute("CALL delete_connection(?)", [req.params.id]);
+
+  if (metadata.affectedRows > 0) {
+    res.status(204).send();
+  } else {
+    res.status(404).send();
+  }
+}));
+
+app.post("/likes", handle_async(async (req, res) => {
+  const { id_connection, id_user } = req.body;
+
+  const [[[data]]] = await pool.execute("CALL create_like(?, ?)", [id_connection, id_user]);
+
+  res.status(201).json(data);
+}));
+
+app.get("/likes/:id", handle_async(async (req, res) => {
+  const [[[data]]] = await pool.execute("CALL read_likes_by_id(?)", [req.params.id]);
+
+  res.json(data);
+}));
+
+app.get("/likes", handle_async(async (req, res) => {
+  const [[data]] = await pool.execute("CALL read_likes", []);
+
+  res.json(data);
+}));
+
+app.post("/messages", handle_async(async (req, res) => {
+  const { id_connection, id_user, text } = req.body;
+
+  const [[[data]]] = await pool.execute("CALL create_message(?, ?, ?)", [id_connection, id_user, text]);
+
+  res.status(201).json(data);
+}));
+
+app.get("/messages/:id", handle_async(async (req, res) => {
+  const [[[data]]] = await pool.execute("CALL read_messages_by_id(?)", [req.params.id]);
+
+  res.json(data);
+}));
+
+app.get("/messages", handle_async(async (req, res) => {
+  const [[data]] = await pool.execute("CALL read_messages", []);
+
+  res.json(data);
 }));
 
 app.get("/", (req, res) => {

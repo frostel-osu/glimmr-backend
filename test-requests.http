@@ -1,8 +1,17 @@
+@id_user_1 = 4
+@id_user_2 = 5
+@id_user_3 = 6
+
+@id_connection_1 = 4
+@id_connection_2 = 5
+
+@id_like_1 = 5
+
+@id_message_1 = 4
+
 @port = 3000
 
-@id_user = 4
-
-### 1. CREATE
+### 1a. POST /users (201)
 
 POST http://localhost:{{port}}/users HTTP/1.1
 content-type: application/json
@@ -13,27 +22,203 @@ content-type: application/json
   "phone": "555-444-4444"
 }
 
-### 2. READ ONE
+### 1b. POST /users (201)
 
-GET http://localhost:{{port}}/users/{{id_user}} HTTP/1.1
+POST http://localhost:{{port}}/users HTTP/1.1
+content-type: application/json
 
-### 3. READ ALL
+{
+  "email": "morgan@example.com",
+  "name": "Morgan",
+  "phone": "555-555-5555"
+}
+
+### 1c. POST /users (500)
+
+POST http://localhost:{{port}}/users HTTP/1.1
+content-type: application/json
+
+{
+  "email": "casey@example.com",
+  "name": "Casey",
+  "phone": "555-555-5555"
+}
+
+### 2a. POST /connections (201)
+
+POST http://localhost:{{port}}/connections HTTP/1.1
+content-type: application/json
+
+{
+  "id_user_1": {{id_user_1}},
+  "id_user_2": {{id_user_2}}
+}
+
+### 2b. POST /connections (500)
+
+POST http://localhost:{{port}}/connections HTTP/1.1
+content-type: application/json
+
+{
+  "id_user_1": {{id_user_1}},
+  "id_user_2": {{id_user_2}}
+}
+
+### 3a. POST /likes (201)
+
+POST http://localhost:{{port}}/likes HTTP/1.1
+content-type: application/json
+
+{
+  "id_connection": {{id_connection_1}},
+  "id_user": {{id_user_1}}
+}
+
+### 3b. POST /likes (201)
+
+POST http://localhost:{{port}}/likes HTTP/1.1
+content-type: application/json
+
+{
+  "id_connection": {{id_connection_1}},
+  "id_user": {{id_user_2}}
+}
+
+### 3c. POST /likes (500)
+
+POST http://localhost:{{port}}/likes HTTP/1.1
+content-type: application/json
+
+{
+  "id_connection": {{id_connection_1}},
+  "id_user": {{id_user_2}}
+}
+
+### 4a. POST /messages (201)
+
+POST http://localhost:{{port}}/messages HTTP/1.1
+content-type: application/json
+
+{
+  "id_connection": {{id_connection_1}},
+  "id_user": {{id_user_1}},
+  "text": "[REDACTED]"
+}
+
+### 4b. POST /messages (500)
+
+POST http://localhost:{{port}}/messages HTTP/1.1
+content-type: application/json
+
+{
+  "id_connection": {{id_connection_1}},
+  "id_user": {{id_user_3}},
+  "text": "[REDACTED]"
+}
+
+### 5. GET /users/:id (200)
+
+GET http://localhost:{{port}}/users/{{id_user_1}} HTTP/1.1
+
+### 6. GET /connections/:id (200)
+
+GET http://localhost:{{port}}/connections/{{id_connection_1}} HTTP/1.1
+
+### 7. GET /likes/:id (200)
+
+GET http://localhost:{{port}}/likes/{{id_like_1}} HTTP/1.1
+
+### 8. GET /messages/:id (200)
+
+GET http://localhost:{{port}}/messages/{{id_message_1}} HTTP/1.1
+
+### 9. GET /users (200)
 
 GET http://localhost:{{port}}/users HTTP/1.1
 
-### 4. UPDATE
+### 10. GET /connections (200)
 
-PUT http://localhost:{{port}}/users/{{id_user}} HTTP/1.1
+GET http://localhost:{{port}}/connections HTTP/1.1
+
+### 11. GET /likes (200)
+
+GET http://localhost:{{port}}/likes HTTP/1.1
+
+### 12. GET /messages (200)
+
+GET http://localhost:{{port}}/messages HTTP/1.1
+
+### 13a. PUT /users/:id (200)
+
+PUT http://localhost:{{port}}/users/{{id_user_1}} HTTP/1.1
+content-type: application/json
+
+{
+  "phone": "555-666-6666"
+}
+
+### 13b. PUT /users/:id (404)
+
+PUT http://localhost:{{port}}/users/{{id_user_3}} HTTP/1.1
+content-type: application/json
+
+{
+  "phone": "555-777-7777"
+}
+
+### 13c. PUT /users/:id (500)
+
+PUT http://localhost:{{port}}/users/{{id_user_1}} HTTP/1.1
 content-type: application/json
 
 {
   "phone": "555-555-5555"
 }
 
-### 5. DELETE
+### 14a. PUT /connections/:id (200)
 
-DELETE http://localhost:{{port}}/users/{{id_user}} HTTP/1.1
+PUT http://localhost:{{port}}/connections/{{id_connection_1}} HTTP/1.1
+content-type: application/json
 
-### 6. READ ALL
+{
+  "is_deleted": true
+}
 
-GET http://localhost:{{port}}/users HTTP/1.1
+### 14b. PUT /connections/:id (404)
+
+PUT http://localhost:{{port}}/connections/{{id_connection_2}} HTTP/1.1
+content-type: application/json
+
+{
+  "is_deleted": true
+}
+
+### 14c. PUT /connections/:id (500)
+
+PUT http://localhost:{{port}}/connections/{{id_connection_1}} HTTP/1.1
+content-type: application/json
+
+{
+  "id_user_1": {{id_user_1}},
+  "id_user_2": {{id_user_1}}
+}
+
+### 15a. DELETE /users/:id (204)
+
+DELETE http://localhost:{{port}}/users/{{id_user_1}} HTTP/1.1
+
+### 15b. DELETE /users/:id (204)
+
+DELETE http://localhost:{{port}}/users/{{id_user_2}} HTTP/1.1
+
+### 15c. DELETE /users/:id (404)
+
+DELETE http://localhost:{{port}}/users/{{id_user_3}} HTTP/1.1
+
+### 16a. DELETE /connections/:id (204)
+
+DELETE http://localhost:{{port}}/connections/{{id_connection_1}} HTTP/1.1
+
+### 16b. DELETE /connections/:id (404)
+
+DELETE http://localhost:{{port}}/connections/{{id_connection_2}} HTTP/1.1
