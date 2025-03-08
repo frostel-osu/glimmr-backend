@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   id_user INT AUTO_INCREMENT PRIMARY KEY,
-  date DATETIME NOT NULL,
+  date DATETIME NOT NULL DEFAULT NOW(),
   email VARCHAR(255) NOT NULL UNIQUE,
   name VARCHAR(255) NOT NULL,
   phone VARCHAR(255) NOT NULL UNIQUE
@@ -24,7 +24,7 @@ CREATE TABLE connections (
   id_connection INT AUTO_INCREMENT PRIMARY KEY,
   id_user_1 INT,
   id_user_2 INT,
-  date DATETIME,
+  is_deleted BOOL NOT NULL DEFAULT FALSE,
   CONSTRAINT fk_connections_id_user_1
     FOREIGN KEY (id_user_1)
     REFERENCES users (id_user)
@@ -86,7 +86,7 @@ CREATE TABLE likes (
   id_like INT AUTO_INCREMENT PRIMARY KEY,
   id_connection INT NOT NULL,
   id_user INT,
-  date datetime NOT NULL,
+  date datetime NOT NULL DEFAULT NOW(),
   CONSTRAINT fk_likes_id_connection
     FOREIGN KEY (id_connection)
     REFERENCES connections (id_connection)
@@ -116,7 +116,7 @@ DELIMITER //
 DROP FUNCTION IF EXISTS assert_connection_has_two_likes //
 
 CREATE FUNCTION assert_connection_has_two_likes(p_id_connection INT, p_id_user INT)
-  RETURNS BOOLEAN
+  RETURNS BOOL
   READS SQL DATA
   BEGIN
     DECLARE v_likes_count INT;
@@ -131,7 +131,7 @@ CREATE FUNCTION assert_connection_has_two_likes(p_id_connection INT, p_id_user I
 DROP FUNCTION IF EXISTS assert_connection_has_user //
 
 CREATE FUNCTION assert_connection_has_user(p_id_connection INT, p_id_user INT)
-  RETURNS BOOLEAN
+  RETURNS BOOL
   READS SQL DATA
   BEGIN
     DECLARE v_connections_count INT;
@@ -146,6 +146,19 @@ CREATE FUNCTION assert_connection_has_user(p_id_connection INT, p_id_user INT)
       );
 
     RETURN v_connections_count > 0;
+  END //
+
+DROP FUNCTION IF EXISTS assert_connection_is_deleted //
+
+CREATE FUNCTION assert_connection_is_deleted(p_id_connection INT)
+  RETURNS BOOL
+  READS SQL DATA
+  BEGIN
+    DECLARE v_is_deleted BOOL;
+
+    SELECT is_deleted INTO v_is_deleted FROM connections WHERE id_connection = p_id_connection;
+
+    RETURN v_is_deleted;
   END //
 
 DELIMITER ;
@@ -164,6 +177,10 @@ CREATE PROCEDURE validate_likes(IN p_id_connection INT, IN p_id_user INT)
 
     IF NOT assert_connection_has_user(p_id_connection, p_id_user) THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The user must be part of the connection";
+    END IF;
+
+    IF assert_connection_is_deleted(p_id_connection) THEN
+      SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The connection must not be deleted";
     END IF;
   END //
 
@@ -193,7 +210,7 @@ CREATE TABLE messages (
   id_message INT AUTO_INCREMENT PRIMARY KEY,
   id_connection INT NOT NULL,
   id_user INT,
-  date datetime NOT NULL,
+  date datetime NOT NULL DEFAULT NOW(),
   text VARCHAR(255) NOT NULL,
   CONSTRAINT fk_messages_id_connection
     FOREIGN KEY (id_connection)
@@ -229,6 +246,10 @@ CREATE PROCEDURE validate_messages(IN p_id_connection INT, IN p_id_user INT)
 
     IF NOT assert_connection_has_user(p_id_connection, p_id_user) THEN
       SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The user must be part of the connection";
+    END IF;
+
+    IF assert_connection_is_deleted(p_id_connection) THEN
+      SIGNAL SQLSTATE "45000" SET MESSAGE_TEXT = "The connection must not be deleted";
     END IF;
   END //
 
@@ -351,6 +372,10 @@ INSERT INTO messages (
   "2525-01-14 13:30:00",
   "[REDACTED]"
 );
+
+-- UPDATE EXAMPLE CONNECTIONS
+
+UPDATE connections SET is_deleted = TRUE WHERE id_connection = @alex_taylor;
 
 -- END BULK WRITE OPERATION
 

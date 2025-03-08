@@ -13,7 +13,7 @@ DROP PROCEDURE IF EXISTS create_user //
 CREATE PROCEDURE create_user(IN p_email VARCHAR(255), IN p_name VARCHAR(255), IN p_phone VARCHAR(255))
   MODIFIES SQL DATA
   BEGIN
-    INSERT INTO users (date, email, name, phone) VALUES (NOW(), p_email, p_name, p_phone);
+    INSERT INTO users (email, name, phone) VALUES (p_email, p_name, p_phone);
 
     CALL read_users_by_id(LAST_INSERT_ID());
   END //
@@ -39,11 +39,13 @@ DROP PROCEDURE IF EXISTS update_user //
 CREATE PROCEDURE update_user(IN p_id_user INT, IN p_email VARCHAR(255), IN p_name VARCHAR(255), IN p_phone VARCHAR(255))
   MODIFIES SQL DATA
   BEGIN
-    UPDATE users SET
-      email = IFNULL(p_email, email),
-      name = IFNULL(p_name, name),
-      phone = IFNULL(p_phone, phone)
-      WHERE id_user = p_id_user;
+    UPDATE users
+      SET
+        email = IFNULL(p_email, email),
+        name = IFNULL(p_name, name),
+        phone = IFNULL(p_phone, phone)
+      WHERE
+        id_user = p_id_user;
 
     CALL read_users_by_id(p_id_user);
   END //
@@ -101,10 +103,16 @@ CREATE PROCEDURE read_connections()
 
 DROP PROCEDURE IF EXISTS update_connection //
 
-CREATE PROCEDURE update_connection(IN p_id_connection INT, IN p_id_user_1 INT, IN p_id_user_2 INT)
+CREATE PROCEDURE update_connection(IN p_id_connection INT, IN p_id_user_1 INT, IN p_id_user_2 INT, IN p_is_deleted BOOL)
   MODIFIES SQL DATA
   BEGIN
-    UPDATE connections SET id_user_1 = p_id_user_1, id_user_2 = p_id_user_2 WHERE id_connection = p_id_connection;
+    UPDATE connections
+      SET
+        id_user_1 = IFNULL(p_id_user_1, id_user_1),
+        id_user_2 = IFNULL(p_id_user_2, id_user_2),
+        is_deleted = IFNULL(p_is_deleted, is_deleted)
+      WHERE
+        id_connection = p_id_connection;
   END //
 
 DROP PROCEDURE IF EXISTS delete_connection //
@@ -135,7 +143,7 @@ DROP PROCEDURE IF EXISTS create_like //
 CREATE PROCEDURE create_like(IN p_id_connection INT, IN p_id_user INT)
   MODIFIES SQL DATA
   BEGIN
-    INSERT INTO likes (id_connection, id_user, date) VALUES (p_id_connection, p_id_user, NOW());
+    INSERT INTO likes (id_connection, id_user) VALUES (p_id_connection, p_id_user);
   END //
 
 DROP PROCEDURE IF EXISTS read_likes_by_id //
@@ -174,7 +182,7 @@ DROP PROCEDURE IF EXISTS create_message //
 CREATE PROCEDURE create_message(IN p_id_connection INT, IN p_id_user INT, IN p_text VARCHAR(255))
   MODIFIES SQL DATA
   BEGIN
-    INSERT INTO messages (id_connection, id_user, date, text) VALUES (p_id_connection, p_id_user, NOW(), p_text);
+    INSERT INTO messages (id_connection, id_user, text) VALUES (p_id_connection, p_id_user, p_text);
   END //
 
 DROP PROCEDURE IF EXISTS read_messages_by_id //
