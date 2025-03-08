@@ -8,7 +8,17 @@
     </head>
     
 <body>
-    <form method="POST">
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="../users/read.html">Users</a>
+        <a href="../connections/read.html">Connections</a>
+        <a href="../likes/read.html">Likes</a>
+        <a href="../messages/read.html">Messages</a>
+    </nav>
+
+    <h1>Add Like Record</h1>
+    <p>Create a new like between two users. Connection must be created before a like can be recorded.</p>
+    <form class="create-form">
         <legend><strong>Add New Like</strong></legend>
         <fieldset class="fields">
             <label for="idUser">User</label>
@@ -24,11 +34,11 @@
                 <option value="2">Alex-NULL</option>
                 <option value="3">NULL-NULL</option>
               </select>
-        
         </fieldset>
     
-        <input class="btn" type="submit" value="Add Like">
-        <input class="btn" type="button" value="Cancel" onClick="window.location.href='read.html'">
+        <button type="submit">Create</button>
+        <button type="button" onclick="window.location.href='read.html'">Cancel</button>
     </form>
+    <script src="../app.js"></script>
 </body>
 </html>

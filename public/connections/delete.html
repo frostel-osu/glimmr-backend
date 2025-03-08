@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete Glimmr Connection</title>
-    <link rel="stylesheet" href="../styles.css">
-</head>
-<body>
-    <form method="POST">
-        <legend><strong>Delete Connection</strong></legend>
-            <fieldset class="fields">
-            <p>Are you sure you wish to delete the following connection?</p>
-            <input type="hidden" name="connectionID" value="1">
-            <p>This connection is between:</p>
-            <label> <strong>User 1:</strong> </label> Alex 
-            <p>&</p>
-            <label> <strong>User 2:</strong> </label> Taylor 
-    </fieldset>
-    <input type="submit" value="Delete">
-    <button type="button" onclick="window.location.href='read.html'">Cancel</button>
-    </form> 
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Delete Glimmr Connection</title>
+        <link rel="stylesheet" href="../styles.css">
+    </head>
+    <body>
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../users/read.html">Users</a>
+            <a href="../connections/read.html">Connections</a>
+            <a href="../likes/read.html">Likes</a>
+            <a href="../messages/read.html">Messages</a>
+        </nav>
+
+        <h1>Delete Connection Record</h1>
+        <p>This form deletes the connection between two users.</p> 
+        <form method="POST">
+            <legend><strong>Delete Connection</strong></legend>
+                <fieldset class="fields">
+                <p>Are you sure you wish to delete the following connection?</p>
+                <input type="hidden" name="connectionID" value="1">
+                <p>This connection is between:</p>
+                <label> <strong>User 1:</strong> </label> Alex 
+                <p>&</p>
+                <label> <strong>User 2:</strong> </label> Taylor 
+        </fieldset>
+        <input type="submit" value="Delete">
+        <button type="button" onclick="window.location.href='read.html'">Cancel</button>
+        </form> 
+    </body>
 </html>
