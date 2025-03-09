@@ -72,7 +72,7 @@ const loadConnectionsTable = async () => {
                 <td><a href="delete.html?id=${connection.id_user}">Delete</a></td>
                 <td>${connection.name_user_1}</td>
                 <td>${connection.name_user_2}</td>
-                <td>${connection.date}</td>
+                <td>${connection.is_deleted}</td>
             </tr>
         `).join("");
     }
@@ -133,8 +133,6 @@ const populateUserDropDown = async () => {
                 option1.textContent = u.name;
 
                 const option2 = document.createElement("option");
-                option2.value = u.id_user;
-                option2.textContent = u.name;
 
                 user1.appendChild(option1);
                 user2.appendChild(option2);
@@ -174,7 +172,7 @@ const populateUserDropDown = async () => {
 
 
 const updateConnectionsDropdown = (selectedUserId, connections) => {
-    const submitButton = document.querySelector(".create-form button[type='submit']");
+    const submitButton = document.querySelector(".submit-button");
     const connection = document.querySelector("#idConnection");
 
     if (connection) {
@@ -221,13 +219,114 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
+                alert("Connection created successfully.")
                 window.location.href = "read.html";
             } else {
+                alert("Failed to create connection. Please try again.")
                 console.error("Error creating user:", await response.json());
             }
         });
     }
 });
+
+
+// Handle creating connection
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("#create-connection");
+    if (form) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const user1 = document.querySelector("#idUser1").value;
+            const user2 = document.querySelector("#idUser2").value;
+
+            const response = await fetch("/connections", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id_user_1: user1,
+                    id_user_2: user2
+                }),
+            });
+
+            if (response.ok) {
+                alert("Connection created successfully.")
+                window.location.href = "read.html";
+            } else {
+                alert("Failed to create connection. Please check if the connection satisfies the noted conditions and try again.")
+                console.error("Error creating connection:", await response.json());
+            }
+        });
+    }
+});
+
+// Handle creating like
+document.addEventListener("DOMContentLoaded", () => {
+    const likeForm = document.querySelector("#create-like");
+
+    if (likeForm) {
+        likeForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const user = document.querySelector("#idUser").value;
+            const connection = document.querySelector("#idConnection").value;
+
+            const response = await fetch("/likes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id_user: user,
+                    id_connection: connection
+                }),
+            });
+
+            if (response.ok) {
+                alert("Like created successfully.")
+                window.location.href = "read.html";
+            } else {
+                alert("Failed to create like. Please check if the noted conditions are satisfied and try again.")
+                console.error("Error creating like:", await response.json());
+            }
+        });
+    }
+});
+
+// Handle creating message
+document.addEventListener("DOMContentLoaded", () => {
+    const messageForm = document.querySelector("#create-message");
+
+    if (messageForm) {
+        messageForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const user = document.querySelector("#idUser").value;
+            const connection = document.querySelector("#idConnection").value;
+            const text = document.querySelector("#text").value;
+
+            const response = await fetch("/messages", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id_user: user,
+                    id_connection: connection,
+                    text: text
+                }),
+            });
+
+            if (response.ok) {
+                alert("Message created successfully.")
+                window.location.href = "read.html";
+            } else {
+                alert("Failed to create message. Please check if the noted conditions are satisfied and try again.")
+                console.error("Error creating message:", await response.json());
+            }
+        });
+    }
+});
+
 
 // Load content
 document.addEventListener("DOMContentLoaded", () => {

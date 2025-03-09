@@ -129,7 +129,7 @@ CREATE PROCEDURE delete_connection(IN p_id_connection INT)
 
 DELIMITER ;
 
--- CREATE CRUD FOR LIKES
+-- CREATE CRUD FOR F
 
 DROP VIEW IF EXISTS view_likes;
 

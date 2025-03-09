@@ -17,11 +17,11 @@
         </nav>    
 
         <h1>Update Connection</h1>
-        <p>Change user(s) in a connection.</p>
+        <p>Change user(s) in a connection. NOTE: User 1 must come before User 2, i.e. they are higher in the dropdown menu.</p>
         <form method="POST">
             <fieldset>
                 <legend>Edit Connection Details</legend>
-                
+
                 <label>User 1</label>
                 <select name="idUser1" id="idUser1"></select>
         
@@ -29,7 +29,7 @@
                 <select name="idUser2" id="idUser2"></select>
             </fieldset>
 
-            <input type="submit" value="Save">
+            <input type="submit" class="submit-button" value="Save">
             <button type="button" onclick="window.location.href='read.html'">Cancel</button>
         </form>
 

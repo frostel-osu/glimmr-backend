@@ -16,7 +16,10 @@
         </nav>
 
         <h1>Add Connection</h1>
-        <p>Create a new conection between two users.</p>    
+        <p>Create a new conection between two users.</p>
+        <p>NOTE: User 1 must come before User 2, i.e. they are higher in the dropdown menu. 
+            Duplicate connections will not be accepted.
+        </p>    
         <form id="create-connection">
             <legend><strong>Add New Connection Between...</strong></legend>
             <fieldset class="fields">
@@ -26,7 +29,7 @@
                 <select name="idUser2" id="idUser2"></select>
             </fieldset>
         
-            <button type="submit">Create</button>
+            <button type="submit" class="submit-button">Create</button>
             <button type="button" onclick="window.location.href='read.html'">Cancel</button>
         </form>
         <script src="../app.js"></script>        
