@@ -78,10 +78,134 @@ const loadConnectionsTable = async () => {
     }
 };
 
+// Read likes
+const loadLikesTable = async () => {
+    const likes = await fetchLikes();
+    const tableBody = document.querySelector("#likes-table tbody")
 
-// Handle creating entity (general event handler for all entities' submit button)
+    if (tableBody) {
+        tableBody.innerHTML = likes.map(like => `
+            <tr>
+                <td>${like.name_user}</td>
+                <td>${like.name_connection}</td>
+                <td>${like.date}</td>
+            </tr>
+        `).join("");
+    }
+};
+
+
+// Populate user dropdown for connections, likes
+const populateUserDropDown = async () => {
+    try {
+        const users = await fetchUsers();
+        const connections = await fetchConnections();
+
+        const user = document.querySelector("#idUser"); // for create like
+        const user1 = document.querySelector("#idUser1"); // for create connection
+        const user2 = document.querySelector("#idUser2"); // for create connection
+        const connection = document.querySelector("#idConnection"); // for create like
+
+        // Populate user dropdown for likes/create.html
+        if (user) {
+            user.innerHTML = ""; 
+            users.forEach(u => {
+                const option = document.createElement("option");
+                option.value = u.id_user;
+                option.textContent = u.name;
+                user.appendChild(option);
+            });
+            user.addEventListener("change", () => {
+                updateConnectionsDropdown(user.value, connections);
+            });
+
+            updateConnectionsDropdown(user.value, connections);
+        }
+
+        // Populate user1 and user2 dropdowns for connections/create.html
+        if (user1 && user2) {
+            user1.innerHTML = "";
+            user2.innerHTML = "";
+
+            users.forEach(u => {
+                const option1 = document.createElement("option");
+                option1.value = u.id_user;
+                option1.textContent = u.name;
+
+                const option2 = document.createElement("option");
+                option2.value = u.id_user;
+                option2.textContent = u.name;
+
+                user1.appendChild(option1);
+                user2.appendChild(option2);
+            });
+
+            // Remove selected user1 from user2 dropdown
+            user1.addEventListener("change", () => {
+                const selectedUserId = user1.value;
+                user2.innerHTML = "";
+
+                users
+                    .filter(u => u.id_user !== parseInt(selectedUserId)) // remove selected user
+                    .forEach(u => {
+                        const option = document.createElement("option");
+                        option.value = u.id_user;
+                        option.textContent = u.name;
+                        user2.appendChild(option);
+                    });
+            });
+        }
+
+        // Populate connections dropdown for likes
+        if (connection) {
+            connection.innerHTML = "";
+            connections.forEach(c => {
+                const option = document.createElement("option");
+                option.value = c.id_connection;
+                option.textContent = `${c.name_connection}`;
+                connection.appendChild(option);
+            });
+        }
+
+    } catch (error) {
+        console.error("Error loading dropdowns:", error);
+    }
+};
+
+
+const updateConnectionsDropdown = (selectedUserId, connections) => {
+    const submitButton = document.querySelector(".create-form button[type='submit']");
+    const connection = document.querySelector("#idConnection");
+
+    if (connection) {
+        connection.innerHTML = "";
+
+        const filteredConnections = connections.filter(c => 
+            c.id_user_1 == selectedUserId || c.id_user_2 == selectedUserId
+        );
+
+        filteredConnections.forEach(c => {
+            const option = document.createElement("option");
+            option.value = c.id_connection;
+            option.textContent = `${c.name_connection}`;
+            connection.appendChild(option);
+            submitButton.disabled = false;
+        });
+
+        if (filteredConnections.length === 0) {
+            const option = document.createElement("option");
+            option.textContent = "This user does not have any connections.";
+            option.disabled = true;
+            option.selected = true;
+            connection.appendChild(option);
+            submitButton.disabled = true;
+        }
+    }
+};
+
+// Handle creating user
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector(".create-form");
+    const form = document.querySelector("#create-user");
     if (form) {
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
@@ -122,4 +246,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.querySelector("#likes-table")) {
         loadLikesTable();
     };
+
+    if (document.querySelector("#idUser") || 
+        document.querySelector("#idUser1") && document.querySelector("#idUser2") || 
+        document.querySelector("#idConnection")) {
+        populateUserDropDown();
+    }
 });
