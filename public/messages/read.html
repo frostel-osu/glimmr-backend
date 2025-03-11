@@ -9,48 +9,33 @@
 <body>
     <nav>
         <a href="../index.html">Home</a>
-        <a href="#" onclick="loadView('users'); return false;">Users</a>
+        <a href="../users/read.html">Users</a>
         <a href="../connections/read.html">Connections</a>
         <a href="../likes/read.html">Likes</a>
         <a href="../messages/read.html">Messages</a>
     </nav>
 
-    <script src="../app.js"></script>
-    <div id="hide">
     <h1>All Messages</h1>
+    <p>Information of all Glimmr messages. Message is sent from 'User' to the other party in the 'Connection'.</p>
+    <p>NOTE: A connection must be created before users can send messages to each other.</p>
+    <div id="hide">
     <div>
         <h2>Messages List</h2>
         <button type="button"><a href="create.html">Add New Message</a></button>
-        <table>
-            <tr>
-                <th>User</th>
-                <th>Connection</th>
-                <th>Date</th>
-                <th>Text</th>
-            </tr>
-            <tr>
-                <td>Alex</td>
-                <td>Alex-Taylor</td>
-                <td>2525-01-05</td>
-                <th>[REDACTED]</th>
-            </tr>
-            <tr>
-                <td>Alex</td>
-                <td>Alex-NULL</td>
-                <td>2525-01-07</td>
-                <th>[REDACTED]</th>
-            </tr>
-            <tr>
-                <td>NULL</td>
-                <td>Alex-NULL</td>
-                <td>2525-01-14</td>
-                <th>[REDACTED]</th>
-            </tr>
+        <table id="messages-table">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Connection</th>
+                    <th>Date</th>
+                    <th>Text</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
         </table>
     </div>
-    </div>
-
-    <div id="content">
-    </div>
+    <script src="../app.js"></script>
 </body>
 </html>

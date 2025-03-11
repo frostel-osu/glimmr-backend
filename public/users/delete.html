@@ -7,16 +7,25 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
-    <form method="POST">
+    <nav>
+        <a href="../index.html">Home</a>
+        <a href="../users/read.html">Users</a>
+        <a href="../connections/read.html">Connections</a>
+        <a href="../likes/read.html">Likes</a>
+        <a href="../messages/read.html">Messages</a>
+    </nav>
+
+    <h1>Remove User</h1>
+    <p>Delete a user from the record.</p>
+    <form id="delete-user">
         <legend><strong>Delete Person</strong></legend>
             <fieldset class="fields">
-            <p>Are you sure you wish to delete the following user?</p>
-            <input type="hidden" name="personID" id="deletepersonID" value="1">
-            <label><strong>ID:</strong></label> 1
-            <label> <strong>Name:</strong> </label> Alex 
+            <p>Are you sure you want to delete the following user?</p>
+            <p id="delete-name"></p>
     </fieldset>
-    <input type="submit" value="Delete">
+    <button type="submit">Delete</button>
     <button type="button" onclick="window.location.href='read.html'">Cancel</button>
     </form> 
+    <script src="../app.js"></script>
 </body>
 </html>
