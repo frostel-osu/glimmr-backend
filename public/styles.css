@@ -1,9 +1,28 @@
 @import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
 
+.header {
+    text-align: center;
+    padding: 15px 30px;
+    background-color: rgba(78, 0, 78, 0.952);
+    color: white;
+}
+
 body {
     background-color: rgb(255, 255, 255);
     color: purple;
     font-family: "Open Sans", sans-serif;
+}
+
+footer {
+    background-color: purple;
+    color: white;
+    text-align: center;
+    font-size: small;
+    padding: 30px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
 }
 
 table, th, td {
@@ -46,45 +65,13 @@ select {
     box-sizing: border-box;
 }
 
-/* vertical nav bar for homepage */
-
-nav.home {
-    display: flex;
-    border: none;
-    flex-direction: column;
-    align-items: flex-start;
-    background-color: purple;
-    justify-content: space-around;
+.body-info {
+    display:flexbox;
 }
-
-nav a.home{
-    display: block;
-    padding: 10px;
-    color: white;
-    flex-grow: 1;
-    text-align: center;
-}
-
-.nav-button {
-    background-color: rgba(0,0,0,0);
-    border-style: none;
-    box-sizing: content-box;
-    font-size:larger;
-    color:white;
-    font: inherit;
-    padding:10px;
-    padding-bottom:8px;
-    flex-grow: 1;
-    text-align: center;
-}
-
-
-/* horizontal nav bar for all other pages */
 
 nav {
     display: flex;
-    justify-content: space-around;
-    background-color: rgb(71, 0, 71);
+    background-color: purple;
     padding: 10px;
     justify-content: space-around;
 }
@@ -95,4 +82,8 @@ nav a {
     padding: 10px;
     flex-grow: 1;
     text-align: center;
+}
+
+nav a:hover {
+    background-color: rgba(255, 0, 255, 0.356);
 }
