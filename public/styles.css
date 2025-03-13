@@ -1,16 +1,45 @@
 @import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
 
-.header {
+header {
     text-align: center;
     padding: 15px 30px;
-    background-color: rgba(78, 0, 78, 0.952);
-    color: white;
+    color: purple;
+    margin: 0 auto;
+    background-color: white;
 }
 
 body {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(240, 240, 240);
     color: purple;
     font-family: "Open Sans", sans-serif;
+    margin: 0;
+    padding: 0; 
+    width:100%;
+}
+
+main {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.content {
+    border-radius: 5px;
+    text-align: left;
+    background-color: white;
+    padding: 50px;
+    padding-bottom: 6%;
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow-x: auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+
+header, footer {
+    width: 100vw;
+    position: relative;
 }
 
 footer {
@@ -19,22 +48,45 @@ footer {
     text-align: center;
     font-size: small;
     padding: 30px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    left: 0;
 }
 
+.add-button {
+    display: block;
+    padding: 8px;
+    margin: 30px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px gray solid;
+}
+
+.add-button:hover {
+    background-color: rgba(128, 0, 128, 0.247);
+    color: white;
+    border: 1px gray solid;
+    border-radius: 5px;
+  }
+
+  caption {
+    display: table-caption;
+    text-align: left;
+    font-size: x-large;
+    font-weight: bolder;
+    margin-bottom: 3%;
+  }
+
 table, th, td {
-    margin:5%;
     border-collapse: collapse;
-    width:auto;
-    height: 80%;
-    border:1px solid black;
+    border: 1px solid black;
+}
+
+table {
+    max-width: 80%;
+    border-collapse: collapse;
+    margin: 0 auto;
 }
 
 th, td {
-    padding: 15px;
+    padding: 15px 10px;
     text-align: left;
 }
 
@@ -74,6 +126,7 @@ nav {
     background-color: purple;
     padding: 10px;
     justify-content: space-around;
+    width: 100vw;
 }
 
 nav a {
@@ -85,5 +138,6 @@ nav a {
 }
 
 nav a:hover {
-    background-color: rgba(255, 0, 255, 0.356);
+    background-color: rgb(151, 51, 151);
+    border-radius: 3px;
 }
