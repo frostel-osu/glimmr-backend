@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+    <header>
+        <h1>Update User</h1>
+        <p>Update Glimmr user's name, email, or phone.</p>
+    </header>
     <nav>
         <a href="../index.html">Home</a>
         <a href="../users/read.html">Users</a>
@@ -15,26 +19,26 @@
         <a href="../messages/read.html">Messages</a>
     </nav>
 
-    <h1>Update User</h1>
-    <p>Update Glimmr user's name, email, or phone.</p>
-    <form id="update-user">
-        <fieldset>
-            <legend>Edit User Details</legend>
-            <input type="hidden" name="id_user" id="updateUserID" value="">
+    <div class="content">
+        <form id="update-user">
+            <fieldset>
+                <legend>Edit User Details</legend>
+                <input type="hidden" name="id_user" id="updateUserID" value="">
 
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
 
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" required>
-        </fieldset>
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" required>
+            </fieldset>
 
-        <button type="submit">Submit</button>
-        <button type="button" onclick="window.location.href='read.html'">Cancel</button>
-    </form>
+            <button type="submit">Submit</button>
+            <button type="button" onclick="window.location.href='read.html'">Cancel</button>
+        </form>
+    </div>
     <footer>
         © 2025 Glimmr. All Rights Reserved.
     </footer>

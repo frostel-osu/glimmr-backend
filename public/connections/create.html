@@ -15,23 +15,25 @@
             <a href="../messages/read.html">Messages</a>
         </nav>
 
-        <h1>Add Connection</h1>
-        <p>Create a new conection between two users.</p>
-        <p>NOTE: User 1 must come before User 2, i.e. they are higher in the dropdown menu. 
-            Duplicate connections will not be accepted.
-        </p>    
-        <form id="create-connection">
-            <legend><strong>Add New Connection Between...</strong></legend>
-            <fieldset class="fields">
-                <label>User 1</label>
-                <select name="idUser1" id="idUser1"></select>
-                <label>User 2</label>
-                <select name="idUser2" id="idUser2"></select>
-            </fieldset>
-        
-            <button type="submit" class="submit-button">Create</button>
-            <button type="button" onclick="window.location.href='read.html'">Cancel</button>
-        </form>
+        <div class="content">
+            <h1>Add Connection</h1>
+            <p>Create a new conection between two users.</p>
+            <p>NOTE: User 1 must come before User 2, i.e. they are higher in the dropdown menu. 
+                Duplicate connections will not be accepted.
+            </p>    
+            <form id="create-connection">
+                <legend><strong>Add New Connection Between...</strong></legend>
+                <fieldset class="fields">
+                    <label>User 1</label>
+                    <select name="idUser1" id="idUser1"></select>
+                    <label>User 2</label>
+                    <select name="idUser2" id="idUser2"></select>
+                </fieldset>
+            
+                <button type="submit" class="submit-button">Create</button>
+                <button type="button" onclick="window.location.href='read.html'">Cancel</button>
+            </form>
+        </div>
         <footer>
             © 2025 Glimmr. All Rights Reserved.
         </footer>

@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+    <header>
+        <h1>Remove User</h1>
+        <p>Delete a user from the record.</p>
+    </header>
     <nav>
         <a href="../index.html">Home</a>
         <a href="../users/read.html">Users</a>
@@ -15,17 +19,17 @@
         <a href="../messages/read.html">Messages</a>
     </nav>
 
-    <h1>Remove User</h1>
-    <p>Delete a user from the record.</p>
-    <form id="delete-user">
-        <legend><strong>Delete Person</strong></legend>
-            <fieldset class="fields">
-            <p>Are you sure you want to delete the following user?</p>
-            <p id="delete-name"></p>
-    </fieldset>
-    <button type="submit">Delete</button>
-    <button type="button" onclick="window.location.href='read.html'">Cancel</button>
-    </form> 
+    <div class="content">
+        <form id="delete-user">
+            <legend><strong>Delete Person</strong></legend>
+                <fieldset class="fields">
+                <p>Are you sure you want to delete the following user?</p>
+                <p id="delete-name"></p>
+        </fieldset>
+        <button type="submit">Delete</button>
+        <button type="button" onclick="window.location.href='read.html'">Cancel</button>
+        </form>
+    </div>
     <script src="../app.js"></script>
     <footer>
         © 2025 Glimmr. All Rights Reserved.

@@ -8,10 +8,10 @@
     </head>
     
 <body>
-    <div class="header">
+    <header>
         <h1>Create User</h1>
         <p>Add a new Glimmr user. Input name, email, and phone number.</p>
-    </div>
+    </header>
     <nav>
         <a href="../index.html">Home</a>
         <a href="../users/read.html">Users</a>
@@ -20,22 +20,25 @@
         <a href="../messages/read.html">Messages</a>
     </nav>
 
-    <form id="create-user">
-    <legend><strong>Add New User</strong></legend>
-        <fieldset class="fields">
-            <label>Name</label>
-            <input type="text" name="name" max="255" required>
-    
-            <label>Email</label>
-            <input type="email" name="email" required>
-    
-            <label>Phone Number</label>
-            <input type="text" name="phone" max="255" required>
-        </fieldset>
-    
-        <button type="submit" class="submit-button">Create</button>
-        <button type="button" onclick="window.location.href='read.html'">Cancel</button>
-    </form>
+    <div class="content">
+        <form id="create-user">
+        <legend><strong>Add New User</strong></legend>
+            <fieldset class="fields">
+                <label>Name</label>
+                <input type="text" name="name" max="255" required>
+        
+                <label>Email</label>
+                <input type="email" name="email" required>
+        
+                <label>Phone Number</label>
+                <input type="text" name="phone" max="255" required>
+            </fieldset>
+        
+            <button type="submit" class="submit-button">Create</button>
+            <button type="button" onclick="window.location.href='read.html'">Cancel</button>
+        </form>
+    </div>
+
     <script src="../app.js"></script>
     <footer>
         © 2025 Glimmr. All Rights Reserved.
