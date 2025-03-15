@@ -142,6 +142,8 @@ const populateUserDropDown = async () => {
             // Remove selected user1 from user2 dropdown
             user1.addEventListener("change", () => {
                 const selectedUserId = user1.value;
+                const previousUser2Value = user2.value;
+
                 user2.innerHTML = "";
 
                 users
@@ -152,6 +154,9 @@ const populateUserDropDown = async () => {
                         option.textContent = u.name;
                         user2.appendChild(option);
                     });
+                if ([...user2.options].some(option => option.value === previousUser2Value)) {
+                    user2.value = previousUser2Value;
+                }
             });
         }
 
@@ -220,10 +225,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
-                alert("Connection created successfully.")
+                alert("User created successfully.")
                 window.location.href = "read.html";
             } else {
-                alert("Failed to create connection. Please try again.")
+                alert("Failed to create user. Please try again.")
                 console.error("Error creating user:", await response.json());
             }
         });
@@ -237,8 +242,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (form) {
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
-            const user1 = document.querySelector("#idUser1").value;
-            const user2 = document.querySelector("#idUser2").value;
+            let user1 = parseInt(document.querySelector("#idUser1").value);
+            let user2 = parseInt(document.querySelector("#idUser2").value);
+
+            // assign the smaller ID to user1 and the larger to user2
+            if (user1 > user2) {
+                user1 = document.querySelector("#idUser2").value
+                user2 = document.querySelector("#idUser1").value
+            }
 
             const response = await fetch("/connections", {
                 method: "POST",
@@ -403,8 +414,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const idUser1 = document.querySelector("#idUser1");
             const idUser2 = document.querySelector("#idUser2");
             const isDeleted = document.querySelector("#isDeleted");
+            
             if (isDeleted) {
-                isDeleted.checked = connection.is_deleted === 1 || connection.is_deleted === "true";
+                isDeleted.checked = connection.is_deleted == 1 || connection.is_deleted === "true";
             }
 
             if (idUser1 && idUser2) {
@@ -424,9 +436,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (updateConnectionForm) {
                 updateConnectionForm.addEventListener("submit", async (event) => {
                     event.preventDefault();
-                    const user1 = document.querySelector("#idUser1").value;
-                    const user2 = document.querySelector("#idUser2").value;
-                    const isDeleted = document.querySelector("#isDeleted").checked;
+                    let user1 = parseInt(document.querySelector("#idUser1").value);
+                    let user2 = parseInt(document.querySelector("#idUser2").value);
+
+                    // assign the smaller ID to user1 and the larger to user2
+                    if (user1 > user2) {
+                        user1 = document.querySelector("#idUser2").value
+                        user2 = document.querySelector("#idUser1").value
+                    }
+
+                    const isDeletedValue = document.querySelector("#isDeleted").checked ? "1" : "0";
 
                     const updateResponse = await fetch(`/connections/${connectionId}`, {
                         method: "PUT",
@@ -436,9 +455,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                         body: JSON.stringify({
                             id_user_1: user1,
                             id_user_2: user2,
-                            is_deleted: isDeleted
+                            is_deleted: isDeletedValue
                         }),
                     });
+                
 
                     if (updateResponse.ok) {
                         alert("Connection updated successfully.");
@@ -472,7 +492,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // show user's name for confirmation
         if (deleteName) {
-            deleteName.textContent = `Name: ${user.name}`;
+            deleteName.textContent = `${user.name}`;
         }
     } catch (error) {
         console.error("Error fetching user data:", error);

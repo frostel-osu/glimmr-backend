@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+    <header>
+        <h1>Users List</h1>
+        <p>Information of all Glimmr users. Edit or delete user in record row.</p>
+    </header>
     <nav>
         <a href="../index.html">Home</a>
         <a href="../users/read.html">Users</a>
@@ -15,11 +19,9 @@
         <a href="../messages/read.html">Messages</a>
     </nav>
 
-    <div>
-        <h1>Users List</h1>
-        <p>Information of all Glimmr users. Edit or delete user in record row.</p>
-        <button type="button"><a href="create.html">Add New User</a></button>
+    <div class="content">
         <table id="users-table">
+            <caption>Current Users</caption>
             <thead>
                 <tr>
                     <th></th>
@@ -34,8 +36,11 @@
 
             </tbody>
         </table>
+        <button type="button" class="add-button"><a href="create.html">Add New User</a></button>
     </div>
-    
+    <footer>
+        © 2025 Glimmr. All Rights Reserved.
+    </footer>
     <script src="../app.js"></script>
 </body>
 </html>
