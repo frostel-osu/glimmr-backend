@@ -68,8 +68,8 @@ CREATE VIEW view_connections AS
   SELECT
     this.*,
     CONCAT(IFNULL(user_1.name, "NULL"), " + ", IFNULL(user_2.name, "NULL")) AS name_connection,
-    user_1.name AS name_user_1,
-    user_2.name AS name_user_2
+    IFNULL(user_1.name, "NULL") AS name_user_1,
+    IFNULL(user_2.name, "NULL") AS name_user_2
   FROM connections AS this
   LEFT JOIN view_users AS user_1 ON this.id_user_1 = user_1.id_user
   LEFT JOIN view_users AS user_2 ON this.id_user_2 = user_2.id_user
@@ -134,7 +134,7 @@ DELIMITER ;
 DROP VIEW IF EXISTS view_likes;
 
 CREATE VIEW view_likes AS
-  SELECT this.*, connection.name_connection, user.name AS name_user
+  SELECT this.*, connection.name_connection, IFNULL(user.name, "NULL") AS name_user
   FROM likes AS this
   JOIN view_connections AS connection ON this.id_connection = connection.id_connection
   LEFT JOIN view_users AS user ON this.id_user = user.id_user
@@ -175,7 +175,7 @@ DELIMITER ;
 DROP VIEW IF EXISTS view_messages;
 
 CREATE VIEW view_messages AS
-  SELECT this.*, connection.name_connection, user.name AS name_user
+  SELECT this.*, connection.name_connection, IFNULL(user.name, "NULL") AS name_user
   FROM messages AS this
   JOIN view_connections AS connection ON this.id_connection = connection.id_connection
   LEFT JOIN view_users AS user ON this.id_user = user.id_user
