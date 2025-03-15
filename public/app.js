@@ -142,6 +142,8 @@ const populateUserDropDown = async () => {
             // Remove selected user1 from user2 dropdown
             user1.addEventListener("change", () => {
                 const selectedUserId = user1.value;
+                const previousUser2Value = user2.value;
+
                 user2.innerHTML = "";
 
                 users
@@ -152,6 +154,9 @@ const populateUserDropDown = async () => {
                         option.textContent = u.name;
                         user2.appendChild(option);
                     });
+                if ([...user2.options].some(option => option.value === previousUser2Value)) {
+                    user2.value = previousUser2Value;
+                }
             });
         }
 
@@ -220,10 +225,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
-                alert("Connection created successfully.")
+                alert("User created successfully.")
                 window.location.href = "read.html";
             } else {
-                alert("Failed to create connection. Please try again.")
+                alert("Failed to create user. Please try again.")
                 console.error("Error creating user:", await response.json());
             }
         });
@@ -474,7 +479,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // show user's name for confirmation
         if (deleteName) {
-            deleteName.textContent = `Name: ${user.name}`;
+            deleteName.textContent = `${user.name}`;
         }
     } catch (error) {
         console.error("Error fetching user data:", error);
