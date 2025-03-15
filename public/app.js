@@ -427,7 +427,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     event.preventDefault();
                     const user1 = document.querySelector("#idUser1").value;
                     const user2 = document.querySelector("#idUser2").value;
-                    const isDeletedValue = document.querySelector("#isDeleted").checked ? 1 : 0;
+                    const isDeletedValue = document.querySelector("#isDeleted").checked ? "1" : "0";
 
                     const updateResponse = await fetch(`/connections/${connectionId}`, {
                         method: "PUT",
@@ -440,9 +440,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             is_deleted: isDeletedValue
                         }),
                     });
-                    
-                    alert(isDeletedValue);
-
+                
 
                     if (updateResponse.ok) {
                         alert("Connection updated successfully.");
