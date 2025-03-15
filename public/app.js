@@ -403,8 +403,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const idUser1 = document.querySelector("#idUser1");
             const idUser2 = document.querySelector("#idUser2");
             const isDeleted = document.querySelector("#isDeleted");
+            
             if (isDeleted) {
-                isDeleted.checked = connection.is_deleted === 1 || connection.is_deleted === "true";
+                isDeleted.checked = connection.is_deleted == 1 || connection.is_deleted === "true";
             }
 
             if (idUser1 && idUser2) {
@@ -426,7 +427,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     event.preventDefault();
                     const user1 = document.querySelector("#idUser1").value;
                     const user2 = document.querySelector("#idUser2").value;
-                    const isDeleted = document.querySelector("#isDeleted").checked;
+                    const isDeletedValue = document.querySelector("#isDeleted").checked ? 1 : 0;
 
                     const updateResponse = await fetch(`/connections/${connectionId}`, {
                         method: "PUT",
@@ -436,9 +437,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                         body: JSON.stringify({
                             id_user_1: user1,
                             id_user_2: user2,
-                            is_deleted: isDeleted
+                            is_deleted: isDeletedValue
                         }),
                     });
+                    
+                    alert(isDeletedValue);
+
 
                     if (updateResponse.ok) {
                         alert("Connection updated successfully.");
