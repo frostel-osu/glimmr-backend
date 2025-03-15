@@ -242,8 +242,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (form) {
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
-            const user1 = document.querySelector("#idUser1").value;
-            const user2 = document.querySelector("#idUser2").value;
+            let user1 = parseInt(document.querySelector("#idUser1").value);
+            let user2 = parseInt(document.querySelector("#idUser2").value);
+
+            // assign the smaller ID to user1 and the larger to user2
+            if (user1 > user2) {
+                user1 = document.querySelector("#idUser2").value
+                user2 = document.querySelector("#idUser1").value
+            }
 
             const response = await fetch("/connections", {
                 method: "POST",
@@ -430,8 +436,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (updateConnectionForm) {
                 updateConnectionForm.addEventListener("submit", async (event) => {
                     event.preventDefault();
-                    const user1 = document.querySelector("#idUser1").value;
-                    const user2 = document.querySelector("#idUser2").value;
+                    let user1 = parseInt(document.querySelector("#idUser1").value);
+                    let user2 = parseInt(document.querySelector("#idUser2").value);
+
+                    // assign the smaller ID to user1 and the larger to user2
+                    if (user1 > user2) {
+                        user1 = document.querySelector("#idUser2").value
+                        user2 = document.querySelector("#idUser1").value
+                    }
+
                     const isDeletedValue = document.querySelector("#isDeleted").checked ? "1" : "0";
 
                     const updateResponse = await fetch(`/connections/${connectionId}`, {

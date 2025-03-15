@@ -32,7 +32,7 @@ main {
     background-color: white;
     padding: 50px;
     padding-bottom: 6%;
-    max-width: 60%;
+    max-width: 70%;
     margin: 0 auto;
     overflow-x: auto;
     margin-top: 2%;
@@ -125,6 +125,8 @@ select {
 }
 
 nav {
+    position: sticky;
+    top: 0;
     display: flex;
     background-color: purple;
     padding: 10px;
