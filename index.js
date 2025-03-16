@@ -7,6 +7,10 @@ require("dotenv").config();
 
 const app = express();
 
+const handle_async = (fn) => (req, res, next) => fn(req, res).catch(next); //express 4
+
+//initialize database
+
 const pool = mysql.createPool({
   connectionLimit: 10,
   host: process.env.DB_HOST,
@@ -15,10 +19,12 @@ const pool = mysql.createPool({
   database: process.env.DB_DATABASE
 });
 
+//setup middleware
+
 app.use(express.json());
 app.use(express.static("public"));
 
-const handle_async = (fn) => (req, res, next) => fn(req, res).catch(next); //express 4
+//serve users api
 
 app.post("/users", handle_async(async (req, res) => {
   const { email, name, phone } = req.body;
@@ -67,6 +73,8 @@ app.delete("/users/:id", handle_async(async (req, res) => {
   }
 }));
 
+//serve connections api
+
 app.post("/connections", handle_async(async (req, res) => {
   const { id_user_1, id_user_2 } = req.body;
 
@@ -114,6 +122,8 @@ app.delete("/connections/:id", handle_async(async (req, res) => {
   }
 }));
 
+//serve likes api
+
 app.post("/likes", handle_async(async (req, res) => {
   const { id_connection, id_user } = req.body;
 
@@ -133,6 +143,8 @@ app.get("/likes", handle_async(async (req, res) => {
 
   res.json(data);
 }));
+
+//serve messages api
 
 app.post("/messages", handle_async(async (req, res) => {
   const { id_connection, id_user, text } = req.body;
@@ -154,15 +166,21 @@ app.get("/messages", handle_async(async (req, res) => {
   res.json(data);
 }));
 
+//serve home page
+
 app.get("/", (req, res) => {
   res.send("index.html");
 });
+
+//setup middleware (errors)
 
 app.use((err, req, res, next) => {
   console.error(err);
 
   res.status(500).json(err);
 });
+
+//initialize app
 
 app.listen(process.env.PORT, () => {
     console.log("\"All is for the best in the best of all possible worlds.\" --Pangloss");
