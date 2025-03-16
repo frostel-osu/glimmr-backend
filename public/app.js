@@ -107,10 +107,10 @@ const populateUserDropDown = async () => {
         const isDeleted = document.querySelector("#isDeleted"); // for edit connection
         const connection = document.querySelector("#idConnection"); // for create like
 
-        // Populate user dropdown for likes and messages
+        // Populate user dropdown for likes and messages (ONE USER DROPDOWN ONLY)
         if (user) {
             user.innerHTML = ""; 
-            users.forEach(u => {
+            users.forEach(u => {            // create select option for each user in users
                 const option = document.createElement("option");
                 option.value = u.id_user;
                 option.textContent = u.name;
@@ -119,11 +119,10 @@ const populateUserDropDown = async () => {
             user.addEventListener("change", () => {
                 updateConnectionsDropdown(user.value, connections);
             });
-
             updateConnectionsDropdown(user.value, connections);
         }
 
-        // Populate user1 and user2 dropdowns for connections/create.html
+        // Populate user1 and user2 dropdowns for connections/create.html (TWO USER DROPDOWNS)
         if (user1 && user2) {
             user1.innerHTML = "";
             user2.innerHTML = "";
@@ -139,7 +138,7 @@ const populateUserDropDown = async () => {
                 user2.appendChild(option2);
             });
 
-            // Remove selected user1 from user2 dropdown
+            // Remove selected user1 from user2 dropdown (listen for change in user1 choice)
             user1.addEventListener("change", () => {
                 const selectedUserId = user1.value;
                 const previousUser2Value = user2.value;
@@ -176,7 +175,7 @@ const populateUserDropDown = async () => {
     }
 };
 
-// Update user2 dropdown menu to exclude user1 after choosing user1
+// Update user2 dropdown menu for connections to exclude user1 after choosing user1
 const updateConnectionsDropdown = (selectedUserId, connections) => {
     const submitButton = document.querySelector(".submit-button");
     const connection = document.querySelector("#idConnection");
@@ -245,7 +244,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let user1 = parseInt(document.querySelector("#idUser1").value);
             let user2 = parseInt(document.querySelector("#idUser2").value);
 
-            // assign the smaller ID to user1 and the larger to user2
+            /* assign the smaller ID to user1 and the larger to user2
+               because order of user ID matters in our sql */
             if (user1 > user2) {
                 user1 = document.querySelector("#idUser2").value
                 user2 = document.querySelector("#idUser1").value
@@ -415,6 +415,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const idUser2 = document.querySelector("#idUser2");
             const isDeleted = document.querySelector("#isDeleted");
             
+            // convert existing checkbox value to 1 or 0
             if (isDeleted) {
                 isDeleted.checked = connection.is_deleted == 1 || connection.is_deleted === "true";
             }
@@ -445,6 +446,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         user2 = document.querySelector("#idUser1").value
                     }
 
+                    // backend sees 0 (falsy value) as null, need to convert 0 to string
                     const isDeletedValue = document.querySelector("#isDeleted").checked ? "1" : "0";
 
                     const updateResponse = await fetch(`/connections/${connectionId}`, {
@@ -458,7 +460,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                             is_deleted: isDeletedValue
                         }),
                     });
-                
 
                     if (updateResponse.ok) {
                         alert("Connection updated successfully.");
@@ -515,7 +516,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             } catch (error) {
                 console.error("Error deleting user:", error);
-                alert("An error occurred while deleting the user.");
             }
         });
     }
@@ -560,7 +560,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             } catch (error) {
                 console.error("Error deleting connection:", error);
-                alert("An error occurred while deleting the connection.");
             }
         });
     }

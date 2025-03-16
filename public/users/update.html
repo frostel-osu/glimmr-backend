@@ -31,8 +31,8 @@
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
 
-                <label for="phone">Phone:</label>
-                <input type="text" id="phone" name="phone" required>
+                <label>Phone Number (format: XXX-XXX-XXXX)</label><br>
+                <input type="tel" name="phone" id="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
             </fieldset>
 
             <button type="submit">Submit</button>
